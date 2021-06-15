@@ -9,7 +9,7 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
     volumes:
-      - es_data:/usr/share/elasticsearch/data
+      - elastic_search_data:/usr/share/elasticsearch/data
     environment:
       - http.host=0.0.0.0
       - transport.host=localhost
@@ -25,12 +25,13 @@ services:
     image: graylog/graylog:4.0
     volumes:
       - graylog_data:/usr/share/graylog/data
+      - ./plugins:/usr/share/graylog/plugin
     environment:
       # CHANGE ME (must be at least 16 characters)!
       - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
       # Password: admin
       - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
-      - GRAYLOG_HTTP_EXTERNAL_URI=http://35.219.76.32:9000/
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://35.219.43.145:9000/
     entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
     links:
       - mongodb:mongo
@@ -54,7 +55,7 @@ services:
 volumes:
   mongo_data:
     driver: local
-  es_data:
+  elastic_search_data:
     driver: local
   graylog_data:
     driver: local
